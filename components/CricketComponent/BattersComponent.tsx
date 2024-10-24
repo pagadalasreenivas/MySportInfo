@@ -1,8 +1,16 @@
-import { Text, View ,StyleSheet} from "react-native"
+import { Ionicons } from "@expo/vector-icons";
+import { Text, View ,StyleSheet, TouchableOpacity} from "react-native"
 import { ScrollView } from "react-native-gesture-handler";
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { useRouter } from "expo-router";
 export default function BattersComponent({score}:{score:any}){
     const batter  = score.batting;
     const bowler = score.bowling;
+    const route  = useRouter();
+
+    const routeToPlayerInfo = (id:any) =>{
+        route.navigate('/cricket/(hidden)/playerdata');
+    }
     return (
         <View>
         <ScrollView contentContainerStyle={styles.scrollv}>
@@ -18,7 +26,7 @@ export default function BattersComponent({score}:{score:any}){
       
         <View>
           {batter.map((batsman:any, index:any) => (
-            <View key={index} style={styles.batsmanRow}>
+            <TouchableOpacity key={index} style={styles.batsmanRow} onPress={()=> routeToPlayerInfo(batsman.batsman.id)}>
              <View style={styles.batterInfo}>
                 <Text style={styles.batsmanName}>{batsman.batsman.name}</Text>
                 <Text style={styles.dismissalText} numberOfLines={2}>{batsman["dismissal-text"]}</Text>
@@ -28,7 +36,8 @@ export default function BattersComponent({score}:{score:any}){
               <Text style={styles.batsmanStat}>{batsman["4s"]}</Text>
               <Text style={styles.batsmanStat}>{batsman["6s"]}</Text>
               <Text style={styles.batsmanStat}>{batsman.sr}</Text>
-            </View>
+              <AntDesign style={styles.batsmanStat} name="right" size={15} color="black" />
+            </TouchableOpacity>
           ))}
         </View>
 
@@ -42,7 +51,7 @@ export default function BattersComponent({score}:{score:any}){
         </View>
         <View>
         {bowler.map((bowler:any, index:any) => (
-            <View key={index} style={styles.batsmanRow}>
+            <TouchableOpacity key={index} style={styles.batsmanRow} onPress={()=> routeToPlayerInfo(bowler.bowler.id)}>
              <View style={styles.batterInfo}>
                 <Text style={styles.batsmanName}>{bowler.bowler.name}</Text>
             </View>
@@ -51,7 +60,8 @@ export default function BattersComponent({score}:{score:any}){
               <Text style={styles.batsmanStat}>{bowler.r}</Text>
               <Text style={styles.batsmanStat}>{bowler.w}</Text>
               <Text style={styles.batsmanStat}>{bowler.eco}</Text>
-            </View>
+              <AntDesign style={styles.batsmanStat} name="right" size={15} color="black" />
+            </TouchableOpacity>
           ))}
         </View>
       </View>
@@ -62,21 +72,20 @@ export default function BattersComponent({score}:{score:any}){
 
 const styles = StyleSheet.create({
     batterCard: {
-      padding: 10,
+      padding: 20,
       backgroundColor: '#fff',
-      borderRadius: 10,
+      borderRadius: 15,
       marginVertical: 10,
       borderWidth: 1,
       borderColor: '#ddd',
+      paddingRight:1
     },
     headerRow: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
       marginBottom: 10,
     },
     batsmanRow: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
       marginBottom: 10,
     },
     headerText: {
@@ -91,12 +100,12 @@ const styles = StyleSheet.create({
     headerStat: {
       fontWeight: 'bold',
       fontSize: 16,
-      width: '12%',  // Same width for all stat columns
+      width: '10%',  // Same width for all stat columns
       textAlign: 'center',
     },
     batsmanStat: {
       fontSize: 14,
-      width: '12%',  // Ensure all stats align under headers
+      width: '10%',  // Ensure all stats align under headers
       textAlign: 'center',
     },
     batterInfo: {

@@ -5,6 +5,7 @@ import { useState } from "react";
 export default function Schedule() {
     const { data } = useLocalSearchParams();
     const [scheduleData,setData] = useState(data ? JSON.parse(data as string):[]);
+    console.log(scheduleData);
     return (
         <ScrollView contentContainerStyle={styles.container}>
             {scheduleData.data.matchList.sort((a: { date: string | number | Date; },b: { date: string | number | Date; }) => {

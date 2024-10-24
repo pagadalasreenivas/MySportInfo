@@ -1,37 +1,91 @@
 import { scorecard } from "@/data/ScoreCardCricket";
 import { series } from "@/data/SeriesData";
+import axios from "axios";
 import { useRouter } from "expo-router";
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key, useState } from "react";
 import { View ,Text, StyleSheet,Image,TouchableOpacity} from "react-native";
 
 export default function CricketLiveScoreCard({liveData}:{liveData:any}){
    const[loading,setLoading] = useState(false);
+   const[scheduledata,setScheduledata] = useState<any>(series);
+   const[error,setError]=useState("");
    const route = useRouter();
 
-   const handleFetchSchedule =(id: any) =>{
-     setLoading(true);
-
-     const fetchSeriesSchedule = () => {
-        
-     }
-     const scheduleData = series;
-     route.navigate({
-        pathname:'/cricket/scheduleCricket',
-        params:{data : JSON.stringify(scheduleData)}
-     });
-     setLoading(false);
-   }
-
-   const handleFetchScoreCard =(id: any) =>{
-    setLoading(true);
-    //Api for score data
-    const scoreCard = scorecard;
-    route.push({
-       pathname:'/cricket/scoreCardCricket',
-       params:{data : JSON.stringify(scoreCard)}
-    });
+   const handleFetchSchedule = async (id: string) => {
     setLoading(false);
-  }
+    
+    route.navigate({
+        pathname: '/cricket/(hidden)/schedule',
+        params: { data: JSON.stringify(scheduledata) }
+      });
+  /*
+    try {
+      const response = await axios.get("https://api.cricapi.com/v1/series_info", {
+        params: {
+          apikey: '6a9c069d-f6e1-4aa0-bcff-0c55372af748',
+          id: id
+        },
+      });
+  
+      const fetchedData = response.data; // Assuming the response data structure contains schedule data
+      setScheduledata(fetchedData); // Set the data in the state
+  
+      // Ensure that scheduledata is populated before navigating
+      route.navigate({
+        pathname: '/cricket/(hidden)/schedule',
+        params: { data: JSON.stringify(fetchedData) }
+      });
+  
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error occurred.");
+      }
+    } finally {
+      setLoading(false); // Stop loading after data is fetched or error occurred
+    }
+      */
+  };
+  
+
+  const handleFetchScoreCard = async (id: string) => {
+    setLoading(false);
+
+    route.push({
+        pathname: '/cricket/(hidden)/scorecard',
+        params: { data: JSON.stringify(scorecard) },
+      });
+  /*
+    try {
+      // API call to fetch the scorecard data
+      const response = await axios.get("https://api.cricapi.com/v1/match_scorecard", {
+        params: {
+          apikey: '6a9c069d-f6e1-4aa0-bcff-0c55372af748',
+          id: id
+        },
+      });
+  
+      const scoreCardData = response; // Assuming the API returns the scorecard data in the response
+      console.log(scoreCardData);
+      // Navigate to the scorecard page with the fetched data
+      route.push({
+        pathname: '/cricket/(hidden)/scorecard',
+        params: { data: JSON.stringify(scoreCardData) },
+      });
+  
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error occurred.");
+      }
+    } finally {
+      setLoading(false); // Stop loading after data is fetched or error occurred
+    }
+      */
+  };
+  
     return(
         <View style={styles.card}>
             <View style={styles.titleContainer}>
@@ -49,7 +103,7 @@ export default function CricketLiveScoreCard({liveData}:{liveData:any}){
                     <Text style={styles.teamName}>{liveData.teamInfo[0].shortname}</Text>
                     </View>
                     <View style = {styles.scoreContainer}>
-                        <Text style={styles.scoreText}>{liveData.score[0] ? `${liveData.score[0].r} - ${liveData.score[0].w}/${liveData.score[0].o}` : 'Yet to Bat'}</Text>
+                        <Text style={styles.scoreText}>{liveData.score[0] ? `${liveData.score[0].r}-${liveData.score[0].w}/${liveData.score[0].o}` : 'Yet to Bat'}</Text>
                     </View>
             </View>
             <View style={styles.deetsContainer}>

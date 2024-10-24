@@ -1,4 +1,4 @@
-const crickMatchData = {
+export const crickMatchData = {
     "apikey": "6a9c069d-f6e1-4aa0-bcff-0c55372af748",
     "data": [
       {
