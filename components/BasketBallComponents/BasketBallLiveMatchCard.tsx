@@ -1,44 +1,124 @@
-import { StyleSheet, View,Text,Image } from "react-native";
+import axios from "axios";
+import Constants from "expo-constants";
+import { useRouter } from "expo-router";
+import { useState, useEffect } from "react";
+import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 
-export default function BasketBallLiveCard({livedata}:{livedata:any}){
-    const defaultLogo = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZRTYHk6DOEXbdmxSrU_oSMWlTUUz90of4erH6eiEJZEv8TRuW7mrP6BGq_Eul9kLQ75s&usqp=CAU';
-    return(
+export default function BasketBallLiveCard({ livedata }: { livedata: any }) {
+    const defaultLogo = 'https://www.logodesignlove.com/images/classic/nba-logo.jpg';
+    const [loading, setLoading] = useState(false);
+    const [teamLogos, setTeamLogos] = useState({ home: defaultLogo, away: defaultLogo });
+    const route = useRouter();
+
+    // Delay function
+    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+    // Fetch team logos based on the team IDs from livedata
+    /*const fetchTeamLogos = async (homeTeamId: string, awayTeamId: string) => {
+        try {
+            setLoading(true); // Set loading to true before fetching
+            const homeLogoResponse = await axios.get(`https://basketapi1.p.rapidapi.com/api/basketball/team/${homeTeamId}/image`,{
+                headers:{
+                    'x-rapidapi-key': Constants.expoConfig?.extra?.basketballApikey,
+                    'x-rapidapi-host': Constants.expoConfig?.extra?.basketballHost
+                }
+            }); // Fetch home team logo
+            
+            await delay(4000); // Delay for 250ms before the next request
+            
+            const awayLogoResponse = await axios.get(`https://basketapi1.p.rapidapi.com/api/basketball/team/${awayTeamId}/image`,{
+                headers:{
+                    'x-rapidapi-key': Constants.expoConfig?.extra?.basketballApikey,
+                    'x-rapidapi-host': Constants.expoConfig?.extra?.basketballHost
+                }
+            }); // Fetch away team logo
+            
+            setTeamLogos({
+                home: homeLogoResponse.data.logoUrl || defaultLogo, // Use actual response structure
+                away: awayLogoResponse.data.logoUrl || defaultLogo,
+            });
+        } catch (error) {
+            console.error("Error fetching team logos:", error);
+        } finally {
+            setLoading(false); // Reset loading state
+        }
+    };
+
+    useEffect(() => {
+        fetchTeamLogos(livedata.homeTeam.id, livedata.awayTeam.id); // Call function to fetch logos
+    }, [livedata.homeTeam.id, livedata.awayTeam.id]); // Fetch logos when the livedata changes
+*/
+
+    const routeToGameSquad = async (id: any) => {
+        try {
+            setLoading(true); // Set loading to true before fetching
+            const response = await axios.get(`https://basketapi1.p.rapidapi.com/api/basketball/match/${id}/lineups`, {
+                headers: {
+                    'x-rapidapi-key': Constants.expoConfig?.extra?.basketballApikey,
+                    'x-rapidapi-host': Constants.expoConfig?.extra?.basketballHost
+                }
+            });
+
+            const res = JSON.parse(response.request._response);
+            console.log(res);
+
+            route.navigate({
+                pathname: '/BasketBall/(hidden)/gamesquad',
+                params: {
+                    data: JSON.stringify(res)
+                }
+            });
+        } catch (error) {
+            console.log("Error fetching game squad:", error);
+        } finally {
+            setLoading(false); // Reset loading state
+        }
+    };
+
+    return (
         <View style={styles.container}>
-        <View style={styles.titleContainer}>
-            <Text style={styles.title}>
-                {livedata.league.name} - {livedata.league.season}
-            </Text>
-            <Text style={styles.quarter}>
-                {livedata.status.long}
-            </Text>
-        </View>
-        <View style={styles.deetsContainer}>
-            {/* Home Team */}
-            <View style={styles.teamContainer}>
-                <Image
-                    source={{ uri: livedata.teams.home.logo || defaultLogo }}
-                    style={styles.teamImage} // Add styles to the image
-                    resizeMode="contain" // Adjust how the image is displayed
-                />
-                <Text style={styles.teamName}>{livedata.teams.home.name}</Text>
+            <View style={styles.titleContainer}>
+                <Text style={styles.title}>
+                    {livedata.season.name}
+                </Text>
+                <Text style={styles.quarter}>
+                    {livedata.status.description}
+                </Text>
             </View>
-
-             {/* Score */}
-             <View style={styles.scoreContainer}>
-                    <Text style={styles.scoreText}>{livedata.scores.home.total}-{livedata.scores.away.total}</Text> 
+            <View style={styles.deetsContainer}>
+                {/* Home Team */}
+                <View style={styles.teamContainer}>
+                    <Image
+                        source={{ uri: teamLogos.home }}
+                        style={styles.teamImage} 
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.teamName}>{livedata.homeTeam.name}</Text>
                 </View>
 
-            {/* Away Team */}
-            <View style={styles.teamContainer}>
-                <Image
-                    source={{ uri: livedata.teams.away.logo || defaultLogo}}
-                    style={styles.teamImage} // Add styles to the image
-                    resizeMode="contain" // Adjust how the image is displayed
-                />
-                <Text style={styles.teamName}>{livedata.teams.away.name}</Text>
+                {/* Score */}
+                <View style={styles.scoreContainer}>
+                    <Text style={styles.scoreText}>{livedata.homeScore.display}-{livedata.awayScore.display}</Text>
+                </View>
+
+                {/* Away Team */}
+                <View style={styles.teamContainer}>
+                    <Image
+                        source={{ uri: teamLogos.away }}
+                        style={styles.teamImage} 
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.teamName}>{livedata.awayTeam.name}</Text>
+                </View>
+            </View>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.button} onPress={() => routeToGameSquad(livedata.id)}>
+                    <Text style={styles.buttonText}>
+                        {loading ? 'Loading...' : 'View Squads'}
+                    </Text>
+                </TouchableOpacity>
             </View>
         </View>
-    </View>
     );
 }
 
@@ -58,10 +138,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     titleContainer: {
-        flexDirection: 'row', // Align items in a row
-        justifyContent: 'space-between', // Space between items
-        width: '100%', // Ensure it takes full width
-        paddingHorizontal: 10, // Optional: Add horizontal padding
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        paddingHorizontal: 10,
     },
     quarter: {
         fontSize: 13,
@@ -74,24 +154,24 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     deetsContainer: {
-        flexDirection: 'row', // Change to row to align teams and score horizontally
-        alignItems: 'center', // Center items vertically
+        flexDirection: 'row',
+        alignItems: 'center',
         flex: 1,
-        width: '100%', // Ensure full width
+        width: '100%',
     },
     teamContainer: {
         flexDirection: 'column',
-        alignItems: 'center', // Center team name under image
-        flex: 1, // Allow it to grow to occupy space
+        alignItems: 'center',
+        flex: 1,
     },
     scoreContainer: {
-        flex: 0.5, // Set to occupy space for the score
-        alignItems: 'center', // Center score
+        flex: 0.5,
+        alignItems: 'center',
     },
     teamImage: {
-        width: 80, // Set a fixed width
-        height: 80, // Set a fixed height
-        marginBottom: 5, // Add some space between image and text
+        width: 80,
+        height: 80,
+        marginBottom: 5,
     },
     teamName: {
         fontSize: 12,
@@ -103,4 +183,20 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
-})
+    button: {
+        backgroundColor: '#007bff',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginTop: 10,
+        shadowOpacity: 0.5,
+        marginHorizontal: 10,
+    },
+    buttonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    buttonContainer: {
+        flexDirection: 'row'
+    }
+});

@@ -3,14 +3,29 @@ import { Text, View ,StyleSheet, TouchableOpacity} from "react-native"
 import { ScrollView } from "react-native-gesture-handler";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useRouter } from "expo-router";
+import axios from "axios";
+import Constants from "expo-constants";
 export default function BattersComponent({score}:{score:any}){
     const batter  = score.batting;
     const bowler = score.bowling;
     const route  = useRouter();
 
-    const routeToPlayerInfo = (id:any) =>{
-        route.navigate('/cricket/(hidden)/playerdata');
-    }
+    const routeToPlayerInfo = async (id: string) => {
+      const apiKey = Constants.expoConfig?.extra?.cricketApiKey;
+  
+      try {
+          const response = await axios.get("https://api.cricapi.com/v1/players_info", {
+              params: { apikey: apiKey, id: id },
+          });
+          const playerData = response.data; 
+          route.push({
+              pathname: '/cricket/(hidden)/playerdata',
+              params: { data: JSON.stringify(playerData) },
+          });
+      } catch (error) {
+          console.error("Failed to fetch player data:", error);
+      }
+  };
     return (
         <View>
         <ScrollView contentContainerStyle={styles.scrollv}>

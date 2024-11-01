@@ -1,42 +1,63 @@
+import axios from "axios";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 import { StyleSheet, View,Text,Image } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function FootBallLiveCard({livedata}:{livedata:any}){
+    const [loading,setLoading] = useState(false);
+    const [error,setError] = useState("");
+    const route = useRouter();
+    const routeToMatchSqauds = async (squadData:any) =>{
+
+            route.push({
+                pathname:'/Football/(hidden)/matchsquad',
+                params:{data:JSON.stringify(squadData)}
+            })
+    }
     const defaultLogo = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZRTYHk6DOEXbdmxSrU_oSMWlTUUz90of4erH6eiEJZEv8TRuW7mrP6BGq_Eul9kLQ75s&usqp=CAU';
     return(
         <View style={styles.container}>
         <View style={styles.titleContainer}>
             <Text style={styles.title}>
-                {livedata.league.name}-{livedata.league.season}-{livedata.league.round}
+                {livedata.league_name}-{livedata.league_year}-{livedata.match_round}
             </Text>
             <Text style={styles.quarter}>
-                {livedata.fixture.status.long}
+                {livedata.match_status}
             </Text>
         </View>
         <View style={styles.deetsContainer}>
             {/* Home Team */}
             <View style={styles.teamContainer}>
                 <Image
-                    source={{ uri: livedata.teams.home.logo || defaultLogo }}
+                    source={{ uri: livedata.team_home_badge|| defaultLogo }}
                     style={styles.teamImage} // Add styles to the image
                     resizeMode="contain" // Adjust how the image is displayed
                 />
-                <Text style={styles.teamName}>{livedata.teams.home.name}</Text>
+                <Text style={styles.teamName}>{livedata.match_hometeam_name}</Text>
             </View>
 
              {/* Score */}
              <View style={styles.scoreContainer}>
-                    <Text style={styles.scoreText}>{livedata.goals.home}-{livedata.goals.away}</Text> 
+                    <Text style={styles.scoreText}>{livedata.match_hometeam_score}-{livedata.match_awayteam_score}</Text> 
                 </View>
 
             {/* Away Team */}
             <View style={styles.teamContainer}>
                 <Image
-                    source={{ uri: livedata.teams.away.logo || defaultLogo}}
+                    source={{ uri: livedata.team_away_badge || defaultLogo}}
                     style={styles.teamImage} // Add styles to the image
                     resizeMode="contain" // Adjust how the image is displayed
                 />
-                <Text style={styles.teamName}>{livedata.teams.away.name}</Text>
+                <Text style={styles.teamName}>{livedata.match_awayteam_name}</Text>
             </View>
+        </View>
+        <View style={styles.buttonContainer}>
+        <TouchableOpacity  style={styles.button} onPress={() => routeToMatchSqauds(livedata)}>
+        <Text style={styles.buttonText}>
+                    {loading ? 'Loading...' : 'View Squads'}
+                </Text>
+            </TouchableOpacity>
         </View>
     </View>
     );
@@ -103,4 +124,20 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
+    button: {
+        backgroundColor: '#007bff',
+        padding:10,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginTop: 10,
+        shadowOpacity:0.5,
+        marginHorizontal:10,
+    },
+    buttonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    buttonContainer:{
+        flexDirection:'row'
+    }
 })

@@ -14,7 +14,6 @@ export default function DrawerLayout() {
       <Drawer.Screen name="cricket/index" options={{title:'Cricket'}}/>
       <Drawer.Screen name="football/index" options={{title:'Football'}}/>
       <Drawer.Screen name="basketball/index" options={{title:'BasketBall'}}/>
-      <Drawer.Screen name="tennis/index" options={{title:'Tennis', headerShown:false}}/>
     </Drawer>
   );
 }

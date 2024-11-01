@@ -1,43 +1,47 @@
 import { playerInfo } from '@/data/PlayerInfo';
 import {Image as ExpoImage} from 'expo-image';
-import React from 'react';
+import { useLocalSearchParams } from 'expo-router';
+import React, { useState } from 'react';
 import { Text, View, Image, StyleSheet, FlatList, ScrollView } from 'react-native';
 
-const playerData = playerInfo;
 
 const statsOrder = ['m', 'inn', 'runs', 'avg', '4s', '6s', "50s","100s", "200s"];
 const bowlingStatsOrder =["m", "inn", "b", "runs", "wkts", "bbi", "bbm", "econ", "avg", "sr", "5w", "10w"];
 
 
-// Group stats by stat type (rows) and matchtype (columns)
-const groupStats = (stats: { fn: string; matchtype: string; stat: string; value: string; }[]) => {
-    const battingGrouped: { [key: string]: { [key: string]: string } } = {}; 
+const groupStats = (stats: { fn: string; matchtype: string; stat: string; value: string }[] | undefined) => {
+  const battingGrouped: { [key: string]: { [key: string]: string } } = {};
+
+  if (!stats || !Array.isArray(stats)) return battingGrouped; // Ensure stats is an array
+
   stats.forEach(({ fn, matchtype, stat, value }) => {
-    
-    if (!battingGrouped[stat] && fn.includes('batting')) {
-      battingGrouped[stat] = {};
-    }
-    if(fn.includes('batting')){
-    battingGrouped[stat][matchtype] = value;
+    // Ensure required properties exist and check for "batting" in the 'fn' property
+    if (fn?.includes("batting") && stat && matchtype && value) {
+      if (!battingGrouped[stat]) {
+        battingGrouped[stat] = {}; // Initialize stat if not present
+      }
+      battingGrouped[stat][matchtype] = value;
     }
   });
   return battingGrouped;
 };
 
-const groupBowlingStats = (stats: { fn: string; matchtype: string; stat: string; value: string; }[]) => {
-    const bowlingGrouped: { [key: string]: { [key: string]: string } } = {}; 
+const groupBowlingStats = (stats: { fn: string; matchtype: string; stat: string; value: string }[] | undefined) => {
+  const bowlingGrouped: { [key: string]: { [key: string]: string } } = {};
+
+  if (!stats || !Array.isArray(stats)) return bowlingGrouped; // Ensure stats is an array
+
   stats.forEach(({ fn, matchtype, stat, value }) => {
-    
-    if (!bowlingGrouped[stat] && fn.includes('bowling')) {
-      bowlingGrouped[stat] = {};
-    }
-    if(fn.includes('bowling')){
-    bowlingGrouped[stat][matchtype] = value;
+    // Ensure required properties exist and check for "bowling" in the 'fn' property
+    if (fn?.includes("bowling") && stat && matchtype && value) {
+      if (!bowlingGrouped[stat]) {
+        bowlingGrouped[stat] = {}; // Initialize stat if not present
+      }
+      bowlingGrouped[stat][matchtype] = value;
     }
   });
   return bowlingGrouped;
 };
-
 const CareerStats = ({ stats }: { stats: { fn: string; matchtype: string; stat: string; value: string; }[] }) => {
   const groupedStats = groupStats(stats);
   const bolwingStats = groupBowlingStats(stats);
@@ -90,30 +94,38 @@ const CareerStats = ({ stats }: { stats: { fn: string; matchtype: string; stat: 
 };
 
 export default function PlayerData() {
+  const { data } = useLocalSearchParams();
+  const [playerData, setPlayerData] = useState(data ? JSON.parse(data as string) : {});
+
+  // Log to ensure data is correctly parsed
+  console.log(playerData.data.data);
+
   return (
-    <View style={styles.container}>
-      {/* Player Image and Basic Info */}
-      <ExpoImage 
-  source={{ uri: playerData.data.playerImg }} 
-  style={styles.image} 
-/>
-      <Text style={styles.name}>{playerData.data.name}</Text>
-      <Text style={styles.country}>{playerData.data.country}</Text>
+      <View style={styles.container}>
+          <ExpoImage source={{ uri: playerData.data.playerImg }} style={styles.image} />
+          <Text style={styles.name}>{playerData.data.name}</Text>
+          <Text style={styles.country}>{playerData.data.country}</Text>
 
-      {/* Personal Information Container */}
-      <View style={styles.personalContainer}>
-        <Text style={styles.sectionHeader}>PERSONAL INFORMATION</Text>
-        <Text style={styles.info}>Date Of Birth: {playerData.data.dateOfBirth}</Text>
-        <Text style={styles.info}>Place Of Birth: {playerData.data.placeOfBirth}</Text>
-        <Text style={styles.info}>Role: {playerData.data.role}</Text>
-        <Text style={styles.info}>Batting Style: {playerData.data.battingStyle}</Text>
-        <Text style={styles.info}>Bowling Style: {(playerData.data as { bowlingStyle?: string }).bowlingStyle ?? '-'}</Text>
+          <View style={styles.personalContainer}>
+              <Text style={styles.sectionHeader}>PERSONAL INFORMATION</Text>
+              <Text style={styles.info}>Date Of Birth: {playerData.data.dateOfBirth}</Text>
+              <Text style={styles.info}>Place Of Birth: {playerData.data.placeOfBirth}</Text>
+              <Text style={styles.info}>Role: {playerData.data.role}</Text>
+              <Text style={styles.info}>Batting Style: {playerData.data.battingStyle}</Text>
+              <Text style={styles.info}>
+                  Bowling Style: {(playerData.data as { bowlingStyle?: string }).bowlingStyle ?? '-'}
+              </Text>
+          </View>
+
+          {/* Only render CareerStats if playerData.data.stats is defined and is an array */}
+          {Array.isArray(playerData.data.stats) ? (
+              <ScrollView style={styles.career}>
+                  <CareerStats stats={playerData.data.stats} />
+              </ScrollView>
+          ) : (
+              <Text style={{ textAlign: 'center' }}>No career stats available.</Text>
+          )}
       </View>
-
-      <ScrollView style={styles.career}>
-      <CareerStats stats={playerData.data.stats} />
-      </ScrollView>
-    </View>
   );
 }
 

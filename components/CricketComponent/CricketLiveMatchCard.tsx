@@ -1,6 +1,7 @@
 import { scorecard } from "@/data/ScoreCardCricket";
 import { series } from "@/data/SeriesData";
 import axios from "axios";
+import Constants from "expo-constants";
 import { useRouter } from "expo-router";
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key, useState } from "react";
 import { View ,Text, StyleSheet,Image,TouchableOpacity} from "react-native";
@@ -10,27 +11,21 @@ export default function CricketLiveScoreCard({liveData}:{liveData:any}){
    const[scheduledata,setScheduledata] = useState<any>(series);
    const[error,setError]=useState("");
    const route = useRouter();
+   const defaultLogo = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZRTYHk6DOEXbdmxSrU_oSMWlTUUz90of4erH6eiEJZEv8TRuW7mrP6BGq_Eul9kLQ75s&usqp=CAU';
 
    const handleFetchSchedule = async (id: string) => {
-    setLoading(false);
-    
-    route.navigate({
-        pathname: '/cricket/(hidden)/schedule',
-        params: { data: JSON.stringify(scheduledata) }
-      });
-  /*
+    setLoading(true);
     try {
       const response = await axios.get("https://api.cricapi.com/v1/series_info", {
         params: {
-          apikey: '6a9c069d-f6e1-4aa0-bcff-0c55372af748',
+          apikey: Constants.expoConfig?.extra?.cricketApiKey ,
           id: id
         },
       });
   
-      const fetchedData = response.data; // Assuming the response data structure contains schedule data
-      setScheduledata(fetchedData); // Set the data in the state
+      const fetchedData = response.data; 
+      setScheduledata(fetchedData);
   
-      // Ensure that scheduledata is populated before navigating
       route.navigate({
         pathname: '/cricket/(hidden)/schedule',
         params: { data: JSON.stringify(fetchedData) }
@@ -45,35 +40,29 @@ export default function CricketLiveScoreCard({liveData}:{liveData:any}){
     } finally {
       setLoading(false); // Stop loading after data is fetched or error occurred
     }
-      */
+      
   };
   
 
   const handleFetchScoreCard = async (id: string) => {
-    setLoading(false);
-
-    route.push({
-        pathname: '/cricket/(hidden)/scorecard',
-        params: { data: JSON.stringify(scorecard) },
-      });
-  /*
+    setLoading(true);
+  
     try {
-      // API call to fetch the scorecard data
       const response = await axios.get("https://api.cricapi.com/v1/match_scorecard", {
         params: {
-          apikey: '6a9c069d-f6e1-4aa0-bcff-0c55372af748',
-          id: id
+          apikey: Constants.expoConfig?.extra?.cricketApiKey,
+          id: id,
         },
       });
   
-      const scoreCardData = response; // Assuming the API returns the scorecard data in the response
+      const scoreCardData = response.data;
       console.log(scoreCardData);
-      // Navigate to the scorecard page with the fetched data
+  
+      // Use router to navigate
       route.push({
         pathname: '/cricket/(hidden)/scorecard',
         params: { data: JSON.stringify(scoreCardData) },
       });
-  
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setError(error.message);
@@ -81,11 +70,9 @@ export default function CricketLiveScoreCard({liveData}:{liveData:any}){
         setError("An unexpected error occurred.");
       }
     } finally {
-      setLoading(false); // Stop loading after data is fetched or error occurred
+      setLoading(false);
     }
-      */
   };
-  
     return(
         <View style={styles.card}>
             <View style={styles.titleContainer}>
@@ -96,11 +83,11 @@ export default function CricketLiveScoreCard({liveData}:{liveData:any}){
             <View style={styles.deetsContainer}>
                     <View style={styles.teamContainer}>
                     <Image
-                        source={{ uri: liveData.teamInfo[0].img }}
+                        source={{ uri: liveData?.teamInfo?.[0]?.img || defaultLogo  }}
                         style={styles.teamImage} // Add styles to the image
                         resizeMode="contain" // Adjust how the image is displayed
                     />
-                    <Text style={styles.teamName}>{liveData.teamInfo[0].shortname}</Text>
+                    <Text style={styles.teamName}>{liveData.teams[0]}</Text>
                     </View>
                     <View style = {styles.scoreContainer}>
                         <Text style={styles.scoreText}>{liveData.score[0] ? `${liveData.score[0].r}-${liveData.score[0].w}/${liveData.score[0].o}` : 'Yet to Bat'}</Text>
@@ -109,21 +96,21 @@ export default function CricketLiveScoreCard({liveData}:{liveData:any}){
             <View style={styles.deetsContainer}>
                     <View style={styles.teamContainer}>
                     <Image
-                        source={{ uri: liveData.teamInfo[1].img }}
+                        source={{ uri: liveData?.teamInfo?.[1]?.img || defaultLogo }}
                         style={styles.teamImage} // Add styles to the image
                         resizeMode="contain" // Adjust how the image is displayed
                     />
-                    <Text style={styles.teamName}>{liveData.teamInfo[1].shortname}</Text>
+                    <Text style={styles.teamName}>{liveData.teams[1]}</Text>
                     </View>
                     <View style = {styles.scoreContainer}>
-                    <Text style={styles.scoreText}>{liveData.score[1] ? `${liveData.score[1].r} - ${liveData.score[1].w}/${liveData.score[1].o}` : 'N/A'}</Text>
+                    <Text style={styles.scoreText}>{liveData.score[1] ? `${liveData.score[1].r} - ${liveData.score[1].w}/${liveData.score[1].o}` : 'YET TO BAT'}</Text>
                     </View>
             </View>
             <View>
                 <Text>{liveData.status}</Text>
             </View>
             <View  style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={() =>handleFetchScoreCard(liveData.series_id)}>
+            <TouchableOpacity style={styles.button} onPress={() =>handleFetchScoreCard(liveData.id)}>
                 <Text style={styles.buttonText}>
                     {loading ? 'Loading...' : 'View Scorecard'}
                 </Text>
