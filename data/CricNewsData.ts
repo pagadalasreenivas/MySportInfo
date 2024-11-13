@@ -188,3 +188,33 @@ export const newsData = {
       "webURL": "http://www.cricbuzz.com/cricket-news"
     }
   }
+
+  /*
+  useEffect(() => {
+    const fetchCricketNews = async () => {
+      const url = "https://unofficial-cricbuzz.p.rapidapi.com/news/list";
+      const headers = {
+        "x-rapidapi-key": "c5192a7728msh255b0b9b4d46750p1994f8jsndc4a28a90e8a",
+        "x-rapidapi-host": "unofficial-cricbuzz.p.rapidapi.com",
+      };
+
+      try {
+        const response = await fetch(url, { method: 'GET', headers: headers });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const jsonResponse = await response.json();
+        const fliterR = jsonResponse.newsList.filter((news:any)=> news?.story)
+        console.log(fliterR);
+        setData(fliterR); // Adjust based on the actual response structure
+        console.log(jsonResponse);
+      } catch (error:any) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCricketNews();
+  }, []);
+  */

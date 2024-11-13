@@ -27,7 +27,7 @@ export default function CricketLiveScoreCard({liveData}:{liveData:any}){
       setScheduledata(fetchedData);
   
       route.navigate({
-        pathname: '/cricket/(hidden)/schedule',
+        pathname: '/Cricket/(hidden)/schedule',
         params: { data: JSON.stringify(fetchedData) }
       });
   
@@ -60,7 +60,7 @@ export default function CricketLiveScoreCard({liveData}:{liveData:any}){
   
       // Use router to navigate
       route.push({
-        pathname: '/cricket/(hidden)/scorecard',
+        pathname: '/Cricket/(hidden)/scorecard',
         params: { data: JSON.stringify(scoreCardData) },
       });
     } catch (error) {
@@ -77,7 +77,7 @@ export default function CricketLiveScoreCard({liveData}:{liveData:any}){
         <View style={styles.card}>
             <View style={styles.titleContainer}>
             <Text style={styles.title}>
-                {liveData.name}
+                {liveData?.name}
             </Text>
             </View>
             <View style={styles.deetsContainer}>
@@ -90,7 +90,7 @@ export default function CricketLiveScoreCard({liveData}:{liveData:any}){
                     <Text style={styles.teamName}>{liveData.teams[0]}</Text>
                     </View>
                     <View style = {styles.scoreContainer}>
-                        <Text style={styles.scoreText}>{liveData.score[0] ? `${liveData.score[0].r}-${liveData.score[0].w}/${liveData.score[0].o}` : 'Yet to Bat'}</Text>
+                        <Text style={styles.scoreText}>{liveData.score[0] ? `${liveData.score[0].r}-${liveData.score[0].w}/${liveData.score[0].o}` : 'YET TO BAT'}</Text>
                     </View>
             </View>
             <View style={styles.deetsContainer}>

@@ -19,7 +19,7 @@ export default function BattersComponent({score}:{score:any}){
           });
           const playerData = response.data; 
           route.push({
-              pathname: '/cricket/(hidden)/playerdata',
+              pathname: '/Cricket/(hidden)/playerdata',
               params: { data: JSON.stringify(playerData) },
           });
       } catch (error) {

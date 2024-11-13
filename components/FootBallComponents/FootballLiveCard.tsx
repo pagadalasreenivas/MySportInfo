@@ -8,12 +8,19 @@ export default function FootBallLiveCard({livedata}:{livedata:any}){
     const [loading,setLoading] = useState(false);
     const [error,setError] = useState("");
     const route = useRouter();
-    const routeToMatchSqauds = async (squadData:any) =>{
+    const routeToMatchSqauds = (squadData:any) =>{
 
             route.push({
                 pathname:'/Football/(hidden)/matchsquad',
                 params:{data:JSON.stringify(squadData)}
             })
+    }
+
+    const routeToMatchHighlights = (squadData:any) =>{
+        route.push({
+            pathname:'/Football/(hidden)/matchhighlights',
+            params:{data:JSON.stringify(squadData)}
+        })
     }
     const defaultLogo = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZRTYHk6DOEXbdmxSrU_oSMWlTUUz90of4erH6eiEJZEv8TRuW7mrP6BGq_Eul9kLQ75s&usqp=CAU';
     return(
@@ -56,6 +63,11 @@ export default function FootBallLiveCard({livedata}:{livedata:any}){
         <TouchableOpacity  style={styles.button} onPress={() => routeToMatchSqauds(livedata)}>
         <Text style={styles.buttonText}>
                     {loading ? 'Loading...' : 'View Squads'}
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity  style={styles.button} onPress={() => routeToMatchHighlights(livedata)}>
+        <Text style={styles.buttonText}>
+                    {loading ? 'Loading...' : 'View Highlights'}
                 </Text>
             </TouchableOpacity>
         </View>

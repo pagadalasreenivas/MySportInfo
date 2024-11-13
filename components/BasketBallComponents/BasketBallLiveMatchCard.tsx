@@ -52,13 +52,14 @@ export default function BasketBallLiveCard({ livedata }: { livedata: any }) {
     const routeToGameSquad = async (id: any) => {
         try {
             setLoading(true); // Set loading to true before fetching
+            console.log(id);
             const response = await axios.get(`https://basketapi1.p.rapidapi.com/api/basketball/match/${id}/lineups`, {
                 headers: {
                     'x-rapidapi-key': Constants.expoConfig?.extra?.basketballApikey,
                     'x-rapidapi-host': Constants.expoConfig?.extra?.basketballHost
                 }
             });
-
+            console.log(response.request._response);
             const res = JSON.parse(response.request._response);
             console.log(res);
 

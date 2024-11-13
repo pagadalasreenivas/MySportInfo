@@ -1,18 +1,15 @@
 import { ScrollView, Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import CricketComponent from "@/components/CricketComponent/CricketComponent";
-import LoadingCard from "@/components/Card";  // Assuming this is your loading skeleton
-import { useEffect, useState } from "react";
-import FootBallComponent from "@/components/FootBallComponents/FootBallComponent";
-import BasketBallComponent from "@/components/BasketBallComponents/BasketBallComponent";
 import CricketLiveSummary from "@/components/CricketComponent/CricketLiveSummary";
 import FootBallLiveSummary from "@/components/FootBallComponents/FootballLiveSummary";
+import BasketBallComponent from "@/components/BasketBallComponents/BasketBallComponent";
+import LoadingCard from "@/components/Card";  // Assuming this is your loading skeleton
+import { useEffect, useState } from "react";
 
 export default function Index() {
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("Cricket"); // State to track the active tab
+  const [activeTab, setActiveTab] = useState("Cricket");
 
   useEffect(() => {
-    // Simulate loading for 3 seconds
     const timer = setTimeout(() => {
       setLoading(false);
     }, 3000);
@@ -24,8 +21,8 @@ export default function Index() {
   }
 
   const tabs = [
-    { title: "Cricket", component: <CricketLiveSummary/> },
-    { title: "Football", component: <FootBallLiveSummary/> },
+    { title: "Cricket", component: <CricketLiveSummary /> },
+    { title: "Football", component: <FootBallLiveSummary /> },
     { title: "Basketball", component: <BasketBallComponent /> },
   ];
 
@@ -48,13 +45,14 @@ export default function Index() {
 
       {/* Content based on active tab */}
       <View style={styles.contentContainer}>
-        {tabs.map((tab) => (
-          activeTab === tab.title && (
-            <View key={tab.title} style={styles.componentContainer}>
-              {tab.component}
-            </View>
-          )
-        ))}
+        {tabs.map(
+          (tab) =>
+            activeTab === tab.title && (
+              <View key={tab.title} style={styles.componentContainer}>
+                {tab.component}
+              </View>
+            )
+        )}
       </View>
     </View>
   );
@@ -62,35 +60,42 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection:'column',
-    flex:1
+    flex: 1,
+    backgroundColor: "#f5f5f5",
   },
   tabContainer: {
-    flexDirection:'column',
+    flexDirection: "column",
+    paddingVertical: 10,
     flex:1,
-    backgroundColor: "white", // Tab background color
+    backgroundColor: "white",
+    paddingHorizontal: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
   },
   tab: {
-    padding: 15,
-    marginHorizontal: 10,
-    backgroundColor: "#e0e0e0", // Inactive tab background color
-    borderRadius: 5, // Optional: add some rounded corners
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    backgroundColor: "#e0e0e0",
+    borderRadius: 5,
+    marginHorizontal: 5,
   },
   activeTab: {
-    backgroundColor: "#007BFF", // Active tab background color
+    backgroundColor: "#007BFF",
   },
   tabText: {
     fontSize: 16,
-    color: "#333", // Inactive tab text color
+    color: "#333",
   },
   activeTabText: {
-    color: "#fff", // Active tab text color
+    color: "#fff",
+    fontWeight: "bold",
   },
   contentContainer: {
-    flex: 11, // Use the remaining space for the content
-    padding: 20,
+    flex: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   componentContainer: {
-    marginBottom: 30,
+    flex: 1,
   },
 });

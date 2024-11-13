@@ -1,18 +1,20 @@
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import CricketLiveScoreCard from "./CricketLiveMatchCard";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Constants from "expo-constants";
-import { useFocusEffect } from 'expo-router'; // Import useFocusEffect
+import { useFocusEffect } from 'expo-router';
+import { GlobalContext } from "@/hooks/globalContext";
 
-// Cache structure
 const cache: { [key: string]: { data: any; timestamp: number } } = {};
-const CACHE_THRESHOLD = 5 * 60 * 1000; // 5 minutes
+const CACHE_THRESHOLD = 5 * 60 * 1000;
 
 export default function CricketComponent() {
   const [liveData, setLiveData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+  const [selectedTab, setSelectedTab] = useState<"live" | "upcoming">("live");
+  const{cricketLivedata,setCricketLiveData} = useContext(GlobalContext);
 
   useFocusEffect(
     useCallback(() => {
@@ -60,22 +62,75 @@ export default function CricketComponent() {
   if (loading) return <ActivityIndicator size="large" color="#0000ff" />;
   if (error) return <Text>Error: {error}</Text>;
   if (!liveData || liveData.length === 0) {
-    return <Text>No live matches available.</Text>;
+    return <Text>No matches available.</Text>;
   }
 
-  const filterMatches = liveData.filter(
+  // Filtered data based on selected tab
+  const liveMatches = liveData.filter(
     (match: { matchEnded: boolean; status: string }) =>
       !match.matchEnded && match.status !== "Match not started"
   );
+  const upcomingMatches = liveData.filter(
+    (match: { matchEnded: boolean; status: string }) =>
+      !match.matchEnded && match.status === "Match not started"
+  );
 
   return (
-    <FlatList
-      data={filterMatches}
-      keyExtractor={(item, index) => index.toString()}
-      renderItem={({ item }) => (
-        <CricketLiveScoreCard liveData={item} />
-      )}
-      ListEmptyComponent={<Text>No live matches to display</Text>}
-    />
+    <View style={styles.container}>
+      {/* Tabs for Live and Upcoming */}
+      <View style={styles.tabsContainer}>
+        <TouchableOpacity
+          style={[styles.tabButton, selectedTab === "live" ? styles.activeTab : styles.inactiveTab]}
+          onPress={() => setSelectedTab("live")}
+        >
+          <Text style={selectedTab === "live" ? styles.activeText : styles.inactiveText}>Live</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tabButton, selectedTab === "upcoming" ? styles.activeTab : styles.inactiveTab]}
+          onPress={() => setSelectedTab("upcoming")}
+        >
+          <Text style={selectedTab === "upcoming" ? styles.activeText : styles.inactiveText}>Upcoming</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Display matches based on selected tab */}
+      <FlatList
+        data={selectedTab === "live" ? liveMatches : upcomingMatches}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => <CricketLiveScoreCard liveData={item} />}
+        ListEmptyComponent={<Text>No matches to display in this category</Text>}
+      />
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  tabsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  tabButton: {
+    flex: 1,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  activeTab: {
+    backgroundColor: '#007bff',
+  },
+  inactiveTab: {
+    backgroundColor: '#e0e0e0',
+  },
+  activeText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  inactiveText: {
+    color: '#555',
+  },
+});
