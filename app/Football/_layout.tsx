@@ -9,6 +9,7 @@ export default function RootLayout(){
         <Stack.Screen name="(hidden)/matchsquad" options={{title:'Match Squad'}}/>
         <Stack.Screen name="(hidden)/playerinfo" options={{title:'Player Info'}}/>
         <Stack.Screen name="(hidden)/matchhighlights" options={{title:'Match Highlights'}}/>
+        <Stack.Screen name="(hidden)/footballreaction" options={{title:'Reactionsss'}}/>
         </Stack>
     )
 }

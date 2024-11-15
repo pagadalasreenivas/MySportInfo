@@ -22,6 +22,12 @@ export default function FootBallLiveCard({livedata}:{livedata:any}){
             params:{data:JSON.stringify(squadData)}
         })
     }
+
+    const toggleReaction = () =>{
+        route.push({
+          pathname:'/Football/(hidden)/footballreaction'
+        })
+      }
     const defaultLogo = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZRTYHk6DOEXbdmxSrU_oSMWlTUUz90of4erH6eiEJZEv8TRuW7mrP6BGq_Eul9kLQ75s&usqp=CAU';
     return(
         <View style={styles.container}>
@@ -68,6 +74,11 @@ export default function FootBallLiveCard({livedata}:{livedata:any}){
             <TouchableOpacity  style={styles.button} onPress={() => routeToMatchHighlights(livedata)}>
         <Text style={styles.buttonText}>
                     {loading ? 'Loading...' : 'View Highlights'}
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity  style={styles.button} onPress={() => toggleReaction()}>
+        <Text style={styles.buttonText}>
+                    {loading ? 'Loading...' : 'Add Reactions'}
                 </Text>
             </TouchableOpacity>
         </View>
@@ -138,18 +149,25 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#007bff',
-        padding:10,
+        padding: 5,
         borderRadius: 5,
         alignItems: 'center',
         marginTop: 10,
-        shadowOpacity:0.5,
-        marginHorizontal:10,
-    },
-    buttonText: {
+        shadowOpacity: 0.5,
+        marginHorizontal: 5, // Reduced margin to fit the buttons better
+        flex: 1, // Ensure each button takes equal space
+      },
+      buttonText: {
         color: '#fff',
         fontWeight: 'bold',
-    },
-    buttonContainer:{
-        flexDirection:'row'
-    }
+        fontSize: 12, // Adjust text size for better fit
+        textAlign: 'center', // Ensure text is centered
+        flexWrap: 'wrap', // Allow text to wrap if needed
+      },
+      buttonContainer: {
+        flexDirection: 'row', // Keep buttons in a row
+        justifyContent: 'space-between', // Distribute buttons evenly across the width
+        width: '100%', // Ensure buttons take up full width of container
+        paddingHorizontal: 10, // Add padding to the container for better spacing
+      },
 })

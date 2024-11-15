@@ -2431,3 +2431,321 @@ export const singlePlayerInfo =
           "fieldGoalPct": 67
         }
 }
+
+
+export const matchstats={
+  "statistics": [
+    {
+      "period": "ALL",
+      "groups": [
+        {
+          "groupName": "Scoring",
+          "statisticsItems": [
+            {
+              "name": "Free throws",
+              "home": "3/4 (75%)",
+              "away": "2/2 (100%)",
+              "compareCode": 2,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 3,
+              "awayValue": 2,
+              "homeTotal": 4,
+              "awayTotal": 2,
+              "renderType": 3,
+              "key": "freeThrowsScored"
+            },
+            {
+              "name": "2 pointers",
+              "home": "5/7 (71%)",
+              "away": "5/6 (83%)",
+              "compareCode": 2,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 5,
+              "awayValue": 5,
+              "homeTotal": 7,
+              "awayTotal": 6,
+              "renderType": 3,
+              "key": "twoPointersScored"
+            },
+            {
+              "name": "3 pointers",
+              "home": "1/4 (25%)",
+              "away": "1/4 (25%)",
+              "compareCode": 3,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 1,
+              "awayValue": 1,
+              "homeTotal": 4,
+              "awayTotal": 4,
+              "renderType": 3,
+              "key": "threePointersScored"
+            },
+            {
+              "name": "Field goals",
+              "home": "6/11 (55%)",
+              "away": "6/10 (60%)",
+              "compareCode": 2,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 6,
+              "awayValue": 6,
+              "homeTotal": 11,
+              "awayTotal": 10,
+              "renderType": 3,
+              "key": "fieldGoalsScored"
+            }
+          ]
+        },
+        {
+          "groupName": "Other",
+          "statisticsItems": [
+            {
+              "name": "Rebounds",
+              "home": "4",
+              "away": "6",
+              "compareCode": 2,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 4,
+              "awayValue": 6,
+              "renderType": 2,
+              "key": "rebounds"
+            },
+            {
+              "name": "Fouls",
+              "home": "3",
+              "away": "4",
+              "compareCode": 2,
+              "statisticsType": "negative",
+              "valueType": "event",
+              "homeValue": 3,
+              "awayValue": 4,
+              "renderType": 1,
+              "key": "totalFouls"
+            },
+            {
+              "name": "Timeouts",
+              "home": "0",
+              "away": "0",
+              "compareCode": 3,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 0,
+              "awayValue": 0,
+              "renderType": 1,
+              "key": "timeouts"
+            }
+          ]
+        },
+        {
+          "groupName": "Lead",
+          "statisticsItems": [
+            {
+              "name": "Max points in a row",
+              "home": "5",
+              "away": "4",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 5,
+              "awayValue": 4,
+              "renderType": 1,
+              "key": "maxPointsInARow"
+            },
+            {
+              "name": "Time spent in lead",
+              "home": "7:06",
+              "away": "1:21",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "time",
+              "homeValue": 426,
+              "awayValue": 81,
+              "homeTotal": 0,
+              "awayTotal": 0,
+              "renderType": 1,
+              "key": "timeSpentInLead"
+            },
+            {
+              "name": "Lead changes",
+              "home": "2",
+              "away": "2",
+              "compareCode": 3,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 2,
+              "awayValue": 2,
+              "renderType": 1,
+              "key": "leadChanges"
+            },
+            {
+              "name": "Biggest lead",
+              "home": "4",
+              "away": "2",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 4,
+              "awayValue": 2,
+              "renderType": 1,
+              "key": "biggestLead"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "period": "1ST",
+      "groups": [
+        {
+          "groupName": "Scoring",
+          "statisticsItems": [
+            {
+              "name": "Free throws",
+              "home": "3/4 (75%)",
+              "away": "2/2 (100%)",
+              "compareCode": 2,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 3,
+              "awayValue": 2,
+              "homeTotal": 4,
+              "awayTotal": 2,
+              "renderType": 3,
+              "key": "freeThrowsScored"
+            },
+            {
+              "name": "2 pointers",
+              "home": "5/7 (71%)",
+              "away": "5/6 (83%)",
+              "compareCode": 2,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 5,
+              "awayValue": 5,
+              "homeTotal": 7,
+              "awayTotal": 6,
+              "renderType": 3,
+              "key": "twoPointersScored"
+            },
+            {
+              "name": "3 pointers",
+              "home": "1/4 (25%)",
+              "away": "1/4 (25%)",
+              "compareCode": 3,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 1,
+              "awayValue": 1,
+              "homeTotal": 4,
+              "awayTotal": 4,
+              "renderType": 3,
+              "key": "threePointersScored"
+            },
+            {
+              "name": "Field goals",
+              "home": "6/11 (55%)",
+              "away": "6/10 (60%)",
+              "compareCode": 2,
+              "statisticsType": "positive",
+              "valueType": "team",
+              "homeValue": 6,
+              "awayValue": 6,
+              "homeTotal": 11,
+              "awayTotal": 10,
+              "renderType": 3,
+              "key": "fieldGoalsScored"
+            }
+          ]
+        },
+        {
+          "groupName": "Other",
+          "statisticsItems": [
+            {
+              "name": "Rebounds",
+              "home": "4",
+              "away": "6",
+              "compareCode": 2,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 4,
+              "awayValue": 6,
+              "renderType": 2,
+              "key": "rebounds"
+            },
+            {
+              "name": "Fouls",
+              "home": "3",
+              "away": "4",
+              "compareCode": 2,
+              "statisticsType": "negative",
+              "valueType": "event",
+              "homeValue": 3,
+              "awayValue": 4,
+              "renderType": 1,
+              "key": "totalFouls"
+            }
+          ]
+        },
+        {
+          "groupName": "Lead",
+          "statisticsItems": [
+            {
+              "name": "Max points in a row",
+              "home": "5",
+              "away": "4",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 5,
+              "awayValue": 4,
+              "renderType": 1,
+              "key": "maxPointsInARow"
+            },
+            {
+              "name": "Time spent in lead",
+              "home": "7:06",
+              "away": "1:21",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "time",
+              "homeValue": 426,
+              "awayValue": 81,
+              "homeTotal": 1200,
+              "awayTotal": 1200,
+              "renderType": 1,
+              "key": "timeSpentInLead"
+            },
+            {
+              "name": "Lead changes",
+              "home": "2",
+              "away": "2",
+              "compareCode": 3,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 2,
+              "awayValue": 2,
+              "renderType": 1,
+              "key": "leadChanges"
+            },
+            {
+              "name": "Biggest lead",
+              "home": "4",
+              "away": "2",
+              "compareCode": 1,
+              "statisticsType": "positive",
+              "valueType": "event",
+              "homeValue": 4,
+              "awayValue": 2,
+              "renderType": 1,
+              "key": "biggestLead"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

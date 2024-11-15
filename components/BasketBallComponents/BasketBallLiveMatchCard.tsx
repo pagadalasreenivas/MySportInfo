@@ -76,6 +76,38 @@ export default function BasketBallLiveCard({ livedata }: { livedata: any }) {
         }
     };
 
+    const routeToMatchHighlights =  async(id:any) =>{
+        try {
+            setLoading(true); // Set loading to true before fetching
+            console.log(id);
+            const response = await axios.get(`https://basketapi1.p.rapidapi.com/api/basketball/match/${id}/statistics`, {
+                headers: {
+                    'x-rapidapi-key': Constants.expoConfig?.extra?.basketballApikey,
+                    'x-rapidapi-host': Constants.expoConfig?.extra?.basketballHost
+                }
+            });
+            console.log(response.request._response);
+            const res = JSON.parse(response.request._response);
+            console.log(res);
+
+            route.navigate({
+                pathname: '/BasketBall/(hidden)/matchHighlights',
+                params: {
+                    data: JSON.stringify(res)
+                }
+            });
+        } catch (error) {
+            console.log("Error fetching game squad:", error);
+        } finally {
+            setLoading(false); // Reset loading state
+        }
+    }
+    const toggleReaction = () =>{
+        route.push({
+          pathname:'/BasketBall/(hidden)/basketballreaction'
+        })
+      }
+
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
@@ -118,6 +150,17 @@ export default function BasketBallLiveCard({ livedata }: { livedata: any }) {
                         {loading ? 'Loading...' : 'View Squads'}
                     </Text>
                 </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => routeToMatchHighlights(livedata.id)}>
+                    <Text style={styles.buttonText}>
+                        {loading ? 'Loading...' : 'Match Highlights'}
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => toggleReaction()}>
+                    <Text style={styles.buttonText}>
+                        {loading ? 'Loading...' : 'Add Your Reaction'}
+                    </Text>
+                </TouchableOpacity>
+
             </View>
         </View>
     );
@@ -186,18 +229,25 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#007bff',
-        padding: 10,
+        padding: 5,
         borderRadius: 5,
         alignItems: 'center',
         marginTop: 10,
         shadowOpacity: 0.5,
-        marginHorizontal: 10,
-    },
-    buttonText: {
+        marginHorizontal: 5, // Reduced margin to fit the buttons better
+        flex: 1, // Ensure each button takes equal space
+      },
+      buttonText: {
         color: '#fff',
         fontWeight: 'bold',
-    },
-    buttonContainer: {
-        flexDirection: 'row'
-    }
+        fontSize: 12, // Adjust text size for better fit
+        textAlign: 'center', // Ensure text is centered
+        flexWrap: 'wrap', // Allow text to wrap if needed
+      },
+      buttonContainer: {
+        flexDirection: 'row', // Keep buttons in a row
+        justifyContent: 'space-between', // Distribute buttons evenly across the width
+        width: '100%', // Ensure buttons take up full width of container
+        paddingHorizontal: 10, // Add padding to the container for better spacing
+      },
 });

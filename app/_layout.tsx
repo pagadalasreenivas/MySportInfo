@@ -13,6 +13,7 @@ export default function DrawerLayout() {
     <GlobalContext.Provider value={{cricketLivedata,setCricketLiveData,footballLivedata,setFootballLiveData,basketBallLivedata,setBasketballLiveData}} >
     <Drawer>
       <Drawer.Screen name="index" options={{title:'Home'}}/>
+      <Drawer.Screen name="ViewReactions" options={{title:'Reactions'}}/>
     </Drawer>
     </GlobalContext.Provider>
   );
