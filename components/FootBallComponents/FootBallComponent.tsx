@@ -41,6 +41,7 @@ export default function FootBallComponent() {
           });
 
           const res = response.data;
+          console.log(res);
 
           // Cache the new data along with the current timestamp
           cache[cacheKey] = {

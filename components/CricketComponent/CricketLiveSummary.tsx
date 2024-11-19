@@ -81,8 +81,8 @@ const CricketLiveSummary = () => {
   //match.teams.some((team: string) => teamNames.includes(team))
 
   return (
-    <View style={styles.container}>
-      <View style={styles.liveMatchContainer}>
+    <View >
+      <View >
         {/* Render live match only if available */}
         <FlatList
           data={[single]}
